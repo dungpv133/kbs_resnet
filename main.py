@@ -154,7 +154,7 @@ if __name__ == '__main__':
     else:
         # Run inference on trained model with the validation set load best model weights
         # Load trained/saved model
-        model_inf = nn.DataParallel(AudioClassifier())
+        model_inf = nn.DataParallel(ResNetCustom(num_classes = 2))
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model_inf = model_inf.to(device)
         model_inf.load_state_dict(torch.load('/kaggle/working/kbs_resnet/model.pt'))
