@@ -168,6 +168,7 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
+        print(x.size())
         x = x.permute(0, 2, 1)  # (B,T,F) => (B,F,T)
 
         x = x.unsqueeze_(1)
