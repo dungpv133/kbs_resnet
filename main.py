@@ -150,7 +150,7 @@ if __name__ == '__main__':
     mode = args.mode
     if mode == 'train':
         # Run training model
-        training(train_dl, num_epochs=50, test_dl)
+        training(train_dl, 50, test_dl)
     else:
         # Run inference on trained model with the validation set load best model weights
         # Load trained/saved model
