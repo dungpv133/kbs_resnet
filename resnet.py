@@ -250,7 +250,8 @@ class ClassificationHead(nn.Module):
     def __init__(self, input_dim: int, target_dim: int):
         super().__init__()
         self.ap = nn.AdaptiveAvgPool2d(output_size=1)
-        self.linear = torch.nn.Linear(input_dim, target_dim)
+        self.linear1 = torch.nn.Linear(input_dim, 128)
+        self.linear2 = torch.nn.Linear(128, target_dim)
 
     def forward(self, x):
         # x = x.view(x.size(0), -1)
@@ -260,7 +261,8 @@ class ClassificationHead(nn.Module):
         # print(f"x size after view: {len(x)}")
 
         # Linear layer
-        y_hat = self.linear(x)
+        x = self.linear1(x)
+        y_hat = self.linear2(x)
         return y_hat
 
 class ResNetCustom(nn.Module):
