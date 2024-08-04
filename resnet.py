@@ -253,11 +253,11 @@ class ClassificationHead(nn.Module):
         self.linear = torch.nn.Linear(input_dim, target_dim)
 
     def forward(self, x):
-        # x = x.view(x.size(0), -1)
+        x = x.view(x.size(0), -1)
         # y_hat = self.linear(x)
-        # x = self.ap(x)
+        x = self.ap(x)
         # x = x.view(x.shape[0], -1)
-        print(f"x size after view: {len(x)}")
+        # print(f"x size after view: {len(x)}")
 
         # Linear layer
         y_hat = self.linear(x)
@@ -275,7 +275,7 @@ class ResNetCustom(nn.Module):
 
     def forward(self, x):
         _, x = self.backbone(x)
-        print(f"x: {x}")
+        # print(f"x: {x}")
         # print(f"x size after backbone: {x.size()}")
         # print(f"x size after ir_layer: {x.size()}")
         x = self.head(x)
