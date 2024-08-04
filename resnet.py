@@ -170,8 +170,8 @@ class ResNet(nn.Module):
     def forward(self, x):
         print(x.size())
         # b, c, f, t
-        x = x.permute(0, 2, 3, 1)  # (B,T,F) => (B,F,T)
-        x = torch.squeeze(x)
+        # x = x.permute(0, 2, 3, 1)  # (B,T,F) => (B,F,T)
+        # x = torch.squeeze(x)
         # x = x.unsqueeze_(1)
         out = F.relu(self.bn1(self.conv1(x)))
         out = self.layer1(out)
