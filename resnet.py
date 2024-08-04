@@ -28,7 +28,7 @@ Reference:
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import wespeaker.models.pooling_layers as pooling_layers
+import pooling_layers as pooling_layers
 
 
 class BasicBlock(nn.Module):
@@ -247,7 +247,7 @@ def ResNet293(feat_dim, embed_dim, pooling_func='TSTP', two_emb_layer=False):
 
 if __name__ == '__main__':
     x = torch.zeros(1, 200, 80)
-    model = ResNet34(feat_dim=80, embed_dim=256, two_emb_layer=False)
+    model = ResNet152(feat_dim=80, embed_dim=256, two_emb_layer=False)
     model.eval()
     out = model(x)
     print(out[-1].size())
