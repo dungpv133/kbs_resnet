@@ -281,6 +281,9 @@ class ResNetCustom(nn.Module):
         self.num_classes = num_classes
         self.wav_size = wav_size
         self.backbone = ResNet152(feat_dim=64, embed_dim=256, two_emb_layer=False)
+        for param in self.backbone.parameters():
+            param.requires_grad = False
+
         # resnet_checkpoint = torch.load('/kaggle/input/kbs-clean/voxceleb_resnet152_LM.pt', map_location=lambda storage, loc: storage)
         # self.backbone = self.backbone.load_state_dict(resnet_checkpoint, strict = False)
         self.backbone_path = '/kaggle/input/kbs-clean/voxceleb_resnet152_LM.pt'
