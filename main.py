@@ -45,7 +45,7 @@ def get_lr(optimizer):
 # ----------------------------
 # Training Loop
 # ----------------------------
-def training(train_dl, num_epochs, test_dl):
+def training(train_dl, num_epochs, test_dl, args):
     # Tensorboard 
     writer = SummaryWriter()
 
@@ -59,13 +59,16 @@ def training(train_dl, num_epochs, test_dl):
     # Loss Function, Optimizer and Scheduler
     criterion = nn.CrossEntropyLoss()
     # criterion = nn.BCELoss()
-    optimizer = torch.optim.Adam(model.parameters(),lr=0.001)
-    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.01,
+    lr = args.lr
+    max_lr = args.maxlr
+    optimizer = torch.optim.Adam(model.parameters(),lr=lr)
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=max_lr,
                                                 steps_per_epoch=int(len(train_dl)),
                                                 epochs=num_epochs,
                                                 anneal_strategy='linear')
 
     # Repeat for each epoch
+    num_epochs = args.epochs
     for epoch in range(num_epochs):
         running_loss = 0.0
         correct_prediction = 0
@@ -149,6 +152,9 @@ def inference (model, test_dl):
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", default='train')
+    ap.add_argument("--epochs", type = int, default='50')
+    ap.add_argument("--lr", type = float, default='0.001')
+    ap.add_argument("--maxlr", type = float, default='0.001')
     # args = vars(ap.parse_args)
     args = ap.parse_args()
     print(args)
@@ -157,7 +163,7 @@ if __name__ == '__main__':
     mode = args.mode
     if mode == 'train':
         # Run training model
-        training(train_dl, 50, test_dl)
+        training(train_dl, 50, test_dl, args)
     else:
         # Run inference on trained model with the validation set load best model weights
         # Load trained/saved model
