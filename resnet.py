@@ -268,7 +268,7 @@ class ResNetCustom(nn.Module):
         self.wav_size = wav_size
         self.backbone = ResNet152(feat_dim=64, embed_dim=256, two_emb_layer=False)
         resnet_checkpoint = torch.load('/kaggle/input/kbs-clean/voxceleb_resnet152_LM.pt', map_location=lambda storage, loc: storage)
-        self.backbone = self.backbone.load_state_dict(resnet_checkpoint)
+        self.backbone = self.backbone.load_state_dict(resnet_checkpoint, strict = False)
         self.head = ClassificationHead(input_dim=256, target_dim=self.num_classes)
 
     def forward(self, x):
