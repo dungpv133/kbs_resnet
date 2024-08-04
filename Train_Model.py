@@ -7,6 +7,7 @@ from torch.utils.tensorboard import SummaryWriter
 from sound_classification_dataset import SoundDS
 from sound_classification_model import AudioClassifier
 import numpy as np
+from resnet import ResNetCustom
 
 # ----------------------------
 # Prepare training data from Metadata file
