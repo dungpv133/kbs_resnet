@@ -168,7 +168,7 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        print(x.size())
+        # print(x.size())
         # b, c, f, t
         # x = x.permute(0, 2, 3, 1)  # (B,T,F) => (B,F,T)
         # x = torch.squeeze(x)
