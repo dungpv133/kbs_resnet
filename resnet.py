@@ -274,7 +274,8 @@ class ResNetCustom(nn.Module):
         self.head = ClassificationHead(input_dim=256, target_dim=self.num_classes)
 
     def forward(self, x):
-        x = self.backbone(x)
+        _, x = self.backbone(x)
+        print(f"x: {x}")
         # print(f"x size after backbone: {x.size()}")
         # print(f"x size after ir_layer: {x.size()}")
         x = self.head(x)
