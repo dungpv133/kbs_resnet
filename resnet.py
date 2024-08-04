@@ -283,6 +283,11 @@ class ResNetCustom(nn.Module):
         self.backbone = ResNet152(feat_dim=64, embed_dim=256, two_emb_layer=False)
         # resnet_checkpoint = torch.load('/kaggle/input/kbs-clean/voxceleb_resnet152_LM.pt', map_location=lambda storage, loc: storage)
         # self.backbone = self.backbone.load_state_dict(resnet_checkpoint, strict = False)
+        self.backbone_path = '/kaggle/input/kbs-clean/voxceleb_resnet152_LM.pt'
+        current_model_dict = self.backbone.state_dict()
+        loaded_state_dict = torch.load(self.backbone_path, map_location=torch.device('cpu'))
+        new_state_dict={k:v if v.size()==current_model_dict[k].size()  else  current_model_dict[k] for k,v in zip(current_model_dict.keys(), loaded_state_dict.values())}
+        self.backbone.load_state_dict(new_state_dict, strict=False)
         self.head = ClassificationHead(input_dim=256, target_dim=self.num_classes)
 
     def forward(self, x):
