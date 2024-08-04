@@ -55,7 +55,7 @@ def training(train_dl, num_epochs):
     criterion = nn.CrossEntropyLoss()
     # criterion = nn.BCELoss()
     optimizer = torch.optim.Adam(model.parameters(),lr=0.01)
-    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.001,
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.01,
                                                 steps_per_epoch=int(len(train_dl)),
                                                 epochs=num_epochs,
                                                 anneal_strategy='linear')
