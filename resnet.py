@@ -169,7 +169,8 @@ class ResNet(nn.Module):
 
     def forward(self, x):
         print(x.size())
-        x = x.permute(0, 2, 1)  # (B,T,F) => (B,F,T)
+        # b, c, f, t
+        # x = x.permute(0, 2, 1)  # (B,T,F) => (B,F,T)
 
         x = x.unsqueeze_(1)
         out = F.relu(self.bn1(self.conv1(x)))

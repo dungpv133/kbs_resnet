@@ -10,7 +10,7 @@ class SoundDS(Dataset):
         self.data_path = str(data_path)
         self.duration = 4000
         self.sr = 44100
-        self.channel = 2
+        self.channel = 1
         self.shift_pct = 0.4
             
     # ----------------------------
