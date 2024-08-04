@@ -255,7 +255,7 @@ class ClassificationHead(nn.Module):
     def forward(self, x):
         # x = x.view(x.size(0), -1)
         # y_hat = self.linear(x)
-        x = self.ap(x)
+        # x = self.ap(x)
         x = x.view(x.shape[0], -1)
         print(f"x size after view: {x.size()}")
 
