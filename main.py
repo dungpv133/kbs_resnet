@@ -42,7 +42,7 @@ def prepara_data():
 # ----------------------------
 # Training Loop
 # ----------------------------
-def training(train_dl, num_epochs):
+def training(train_dl, num_epochs, test_dl):
     # Tensorboard 
     writer = SummaryWriter()
 
@@ -104,6 +104,8 @@ def training(train_dl, num_epochs):
         writer.add_scalar("Loss/train", avg_loss, epoch)
         writer.add_scalar("Acc/train", avg_acc, epoch)
         print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {avg_acc:.2f}')
+
+        inference(model, test_dl)
     
     torch.save(model.state_dict(), 'model.pt')    
     print('Finished Training')
@@ -148,7 +150,7 @@ if __name__ == '__main__':
     mode = args.mode
     if mode == 'train':
         # Run training model
-        training(train_dl, num_epochs=50)
+        training(train_dl, num_epochs=50, test_dl)
     else:
         # Run inference on trained model with the validation set load best model weights
         # Load trained/saved model
