@@ -244,10 +244,43 @@ def ResNet293(feat_dim, embed_dim, pooling_func='TSTP', two_emb_layer=False):
                   pooling_func=pooling_func,
                   two_emb_layer=two_emb_layer)
 
+class ClassificationHead(nn.Module):
+    def __init__(self, input_dim: int, target_dim: int):
+        super().__init__()
+        self.ap = nn.AdaptiveAvgPool2d(output_size=1)
+        self.linear = torch.nn.Linear(input_dim, target_dim)
+
+    def forward(self, x):
+        # x = x.view(x.size(0), -1)
+        # y_hat = self.linear(x)
+        x = self.ap(x)
+        x = x.view(x.shape[0], -1)
+        print(f"x size after view: {x.size()}")
+
+        # Linear layer
+        y_hat = self.linear(x)
+        return y_hat
+
+class ResNetCustom(nn.Module):
+    def __init__(self, wav_size=224, num_classes=2):
+        super().__init__()
+        self.num_classes = num_classes
+        self.wav_size = wav_size
+        self.backbone = ResNet152(feat_dim=64, embed_dim=256, two_emb_layer=False)
+        resnet_checkpoint = torch.load('/kaggle/input/kbs-clean/voxceleb_resnet152_LM.pt', map_location=lambda storage, loc: storage)
+        self.backbone = self.backbone.load_state_dict(resnet_checkpoint)
+        self.head = ClassificationHead(input_dim=256, target_dim=self.num_classes)
+
+    def forward(self, x):
+        x = self.backbone(x)
+        # print(f"x size after backbone: {x.size()}")
+        # print(f"x size after ir_layer: {x.size()}")
+        x = self.head(x)
+        return x
 
 if __name__ == '__main__':
     x = torch.zeros(1, 200, 80)
-    model = ResNet152(feat_dim=80, embed_dim=256, two_emb_layer=False)
+    model = ResNet152(feat_dim=64, embed_dim=256, two_emb_layer=False)
     model.eval()
     out = model(x)
     print(out[-1].size())

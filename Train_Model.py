@@ -15,7 +15,9 @@ def prepara_data():
     data_path = 'data/'
 
     # Read metadata file
-    metadata_file = '/content/Audio_Deep_Learning/Audio_Classification/simple_df.csv'
+    # metadata_file = '/content/Audio_Deep_Learning/Audio_Classification/simple_df.csv'
+    # kaggle
+    metadata_file = '/kaggle/input/kbs-clean/temp_cleaned.csv'
     df = pd.read_csv(metadata_file)
     df.head()
 
@@ -44,7 +46,7 @@ def training(train_dl, num_epochs):
     writer = SummaryWriter()
 
     # Create the model and put it on the GPU if available
-    model = nn.DataParallel(AudioClassifier())
+    model = nn.DataParallel(ResNetCustom(num_classes = 2))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
 
