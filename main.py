@@ -4,8 +4,8 @@ import argparse
 from torch import nn
 from torch.utils.data import random_split
 from torch.utils.tensorboard import SummaryWriter
-from sound_classification_dataset import SoundDS
-from sound_classification_model import AudioClassifier
+from dataset import SoundDS
+from basic_model import AudioClassifier
 import numpy as np
 from resnet import ResNetCustom
 
