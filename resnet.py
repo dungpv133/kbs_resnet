@@ -257,7 +257,7 @@ class ClassificationHead(nn.Module):
         # y_hat = self.linear(x)
         # x = self.ap(x)
         # x = x.view(x.shape[0], -1)
-        print(f"x size after view: {x.size()}")
+        print(f"x size after view: {len(x)}")
 
         # Linear layer
         y_hat = self.linear(x)
