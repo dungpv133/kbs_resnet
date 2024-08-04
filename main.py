@@ -38,6 +38,9 @@ def prepara_data():
 
     return (train_dl, val_dl)
 
+def get_lr(optimizer):
+    for param_group in optimizer.param_groups:
+        return param_group['lr']
 
 # ----------------------------
 # Training Loop
@@ -49,6 +52,8 @@ def training(train_dl, num_epochs, test_dl):
     # Create the model and put it on the GPU if available
     model = nn.DataParallel(ResNetCustom(num_classes = 2))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model.load_state_dict(torch.load('/kaggle/input/kbs-clean/best_resnet_custom.pt'))
     model = model.to(device)
 
     # Loss Function, Optimizer and Scheduler
@@ -101,9 +106,10 @@ def training(train_dl, num_epochs, test_dl):
         num_batches = len(train_dl)
         avg_loss = running_loss / num_batches
         avg_acc = correct_prediction/total_prediction
+        current_lr = get_lr(optimizer)
         writer.add_scalar("Loss/train", avg_loss, epoch)
         writer.add_scalar("Acc/train", avg_acc, epoch)
-        print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {avg_acc:.2f}')
+        print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {avg_acc:.2f}, Current LR: {current_lr}')
 
         inference(model, test_dl)
     
@@ -137,6 +143,7 @@ def inference (model, test_dl):
             total_prediction += prediction.shape[0]
         
     acc = correct_prediction/total_prediction
+    print(f"Validation:")
     print(f'Accuracy: {acc:.2f}, Total items: {total_prediction}')
 
 if __name__ == '__main__':
