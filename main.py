@@ -45,7 +45,7 @@ def get_lr(optimizer):
 # ----------------------------
 # Training Loop
 # ----------------------------
-def training(train_dl, num_epochs, test_dl, args):
+def training(train_dl, num_epochs, test_dl, args, device):
     # Tensorboard 
     writer = SummaryWriter()
 
@@ -114,7 +114,7 @@ def training(train_dl, num_epochs, test_dl, args):
         writer.add_scalar("Acc/train", avg_acc, epoch)
         print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {avg_acc:.2f}, Current LR: {current_lr}')
 
-        inference(model, test_dl)
+        inference(model, test_dl, device)
     
     torch.save(model.state_dict(), 'model.pt')    
     print('Finished Training')
@@ -122,7 +122,7 @@ def training(train_dl, num_epochs, test_dl, args):
 # ----------------------------
 # Inference
 # ----------------------------
-def inference (model, test_dl):
+def inference (model, test_dl, device):
     correct_prediction = 0
     total_prediction = 0
 
@@ -158,12 +158,13 @@ if __name__ == '__main__':
     # args = vars(ap.parse_args)
     args = ap.parse_args()
     print(args)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     train_dl, test_dl = prepara_data()
     mode = args.mode
     if mode == 'train':
         # Run training model
-        training(train_dl, 50, test_dl, args)
+        training(train_dl, 50, test_dl, args, device)
     else:
         # Run inference on trained model with the validation set load best model weights
         # Load trained/saved model
@@ -174,5 +175,5 @@ if __name__ == '__main__':
         model_inf.eval()
 
         # Perform inference
-        inference(model_inf, test_dl)
+        inference(model_inf, test_dl, device)
 
