@@ -19,6 +19,7 @@ def prepara_data():
     # metadata_file = '/content/Audio_Deep_Learning/Audio_Classification/simple_df.csv'
     # kaggle
     metadata_file = '/kaggle/input/kbs-clean/temp_cleaned.csv'
+    metadata_file = '/kaggle/input/kbs-clean/label_test.csv'
     df = pd.read_csv(metadata_file)
     df.head()
 
@@ -28,7 +29,7 @@ def prepara_data():
 
     # Random split of 80:20 between training and validation
     num_items = len(myds)
-    num_train = round(num_items * 0.8)
+    num_train = round(num_items * 0)
     num_val = num_items - num_train
     train_ds, val_ds = random_split(myds, [num_train, num_val])
 
@@ -134,22 +135,24 @@ def inference (model, test_dl, device):
 
     # Disable gradient updates
     with torch.no_grad():
-        for data in test_dl:
-            # Get the input features and target labels, and put them on the GPU
-            inputs, labels = data[0].to(device), data[1].to(device)
+        with open('command_detection.txt', 'a') as file:
+            for data in test_dl:
+                # Get the input features and target labels, and put them on the GPU
+                inputs, labels, filename = data[0].to(device), data[1].to(device), data[2].to(device)
 
-            # Normalize the inputs
-            inputs_m, inputs_s = inputs.mean(), inputs.std()
-            inputs = (inputs - inputs_m) / inputs_s
+                # Normalize the inputs
+                inputs_m, inputs_s = inputs.mean(), inputs.std()
+                inputs = (inputs - inputs_m) / inputs_s
 
-            # Get predictions
-            outputs = model(inputs)
+                # Get predictions
+                outputs = model(inputs)
 
-            # Get the predicted class with the highest score
-            _, prediction = torch.max(outputs,1)
-            # Count of predictions that matched the target label
-            correct_prediction += (prediction == labels).sum().item()
-            total_prediction += prediction.shape[0]
+                # Get the predicted class with the highest score
+                _, prediction = torch.max(outputs,1)
+                file.write(filename.replace('.wav', '') + " " + str(prediction) + '\n')
+                # Count of predictions that matched the target label
+                correct_prediction += (prediction == labels).sum().item()
+                total_prediction += prediction.shape[0]
         
     acc = correct_prediction/total_prediction
     print(f"Validation:")
@@ -158,7 +161,7 @@ def inference (model, test_dl, device):
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", default='train')
+    ap.add_argument("--mode", default='test')
     ap.add_argument("--epochs", type = int, default='50')
     ap.add_argument("--lr", type = float, default='0.001')
     ap.add_argument("--maxlr", type = float, default='0.001')
