@@ -119,6 +119,7 @@ def training(train_dl, num_epochs, test_dl, args, device):
 
         acc = inference(model, test_dl, device)
         if(acc > best_acc):
+            best_acc = acc
             print(f"Save best model with accuracy: {best_acc}")
             torch.save(model.state_dict(), 'model_command.pt') 
     
