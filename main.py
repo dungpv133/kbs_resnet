@@ -66,7 +66,8 @@ def training(train_dl, num_epochs, test_dl, args, device):
     #                                             steps_per_epoch=int(len(train_dl)),
     #                                             epochs=num_epochs,
     #                                             anneal_strategy='linear')
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=optimizer, mode='min', patience= 8, min_lr =1e-4, verbose=True)
+    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=optimizer, mode='min', patience= 8, min_lr =1e-4, verbose=True)
+    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.98)
 
     # Repeat for each epoch
     num_epochs = args.epochs
