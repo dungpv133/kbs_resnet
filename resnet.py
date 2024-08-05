@@ -292,6 +292,7 @@ class ResNetCustom(nn.Module):
         self.backbone.load_state_dict(new_state_dict, strict=False)
         for param in self.backbone.parameters():
             param.requires_grad = False
+        print(self.backbone.state_dict().keys())
         self.backbone.seg_bn_1.running_var.requires_grad = True
         self.backbone.seg_2.weight.running_var.requires_grad = True
         self.backbone.seg_2.bias.weight.running_var.requires_grad = True
