@@ -43,4 +43,4 @@ class SoundDS(Dataset):
         sgram = AudioUtil.spectro_gram(shift_aud, n_mels=64, n_fft=1024, hop_len=None)
         aug_sgram = AudioUtil.spectro_augment(sgram, max_mask_pct=0.1, n_freq_masks=2, n_time_masks=2)
 
-        return aug_sgram, class_id, audio_file
+        return aug_sgram, class_id, self.df.loc[idx, 'filename']

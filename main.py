@@ -139,7 +139,7 @@ def inference (model, test_dl, device):
         with open('command_detection.txt', 'a') as file:
             for data in test_dl:
                 # Get the input features and target labels, and put them on the GPU
-                inputs, labels, filename = data[0].to(device), data[1].to(device), data[2].to(device)
+                inputs, labels, filename = data[0].to(device), data[1].to(device), data[2]
 
                 # Normalize the inputs
                 inputs_m, inputs_s = inputs.mean(), inputs.std()
