@@ -13,12 +13,12 @@ from resnet import ResNetCustom
 # Prepare training data from Metadata file
 # ----------------------------
 def prepara_data():
-    data_path = '/kaggle/input/kbs-clean/data_cleaned/data_cleaned/'
+    data_path = '/kaggle/input/kbs-clean/command_detection_test/command_detection'
 
     # Read metadata file
     # metadata_file = '/content/Audio_Deep_Learning/Audio_Classification/simple_df.csv'
     # kaggle
-    metadata_file = '/kaggle/input/kbs-clean/temp_cleaned.csv'
+    # metadata_file = '/kaggle/input/kbs-clean/temp_cleaned.csv'
     metadata_file = '/kaggle/input/kbs-clean/label_test.csv'
     df = pd.read_csv(metadata_file)
     df.head()
