@@ -71,6 +71,7 @@ def training(train_dl, num_epochs, test_dl, args, device):
 
     # Repeat for each epoch
     num_epochs = args.epochs
+    best_acc = 0
     for epoch in range(num_epochs):
         running_loss = 0.0
         correct_prediction = 0
@@ -116,9 +117,11 @@ def training(train_dl, num_epochs, test_dl, args, device):
         writer.add_scalar("Acc/train", avg_acc, epoch)
         print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {avg_acc:.2f}, Current LR: {current_lr}')
 
-        inference(model, test_dl, device)
+        acc = inference(model, test_dl, device)
+        if(acc > best_acc):
+            print(f"Save best model with accuracy: {best_acc}")
+            torch.save(model.state_dict(), 'model_command.pt') 
     
-    torch.save(model.state_dict(), 'model.pt')    
     print('Finished Training')
 
 # ----------------------------
@@ -150,6 +153,7 @@ def inference (model, test_dl, device):
     acc = correct_prediction/total_prediction
     print(f"Validation:")
     print(f'Accuracy: {acc:.2f}, Total items: {total_prediction}')
+    return acc
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
